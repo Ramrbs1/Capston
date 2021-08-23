@@ -48,7 +48,7 @@ jobs:
               docker stop testapp
               exit 1
             fi
-            docker push ramrbs1/project6:letest
+            docker push ramrbs1/project6:latest
             
   test-cluster:
     executor: aws-eks/python3
@@ -141,7 +141,7 @@ workflows:
           
             
             
-      - aws-eks/delete-cluster:
-          cluster-name: ram-capstone
-          requires:
-            - aws-eks/update-container-image
+#      - aws-eks/delete-cluster:
+#          cluster-name: ram-capstone
+#          requires:
+#            - aws-eks/update-container-image
