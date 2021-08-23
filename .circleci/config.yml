@@ -1,0 +1,26 @@
+version: 2.1
+orbs:
+  aws-cli: circleci/aws-cli@2.0.3
+  kubernetes: circleci/kubernetes@0.12.0
+  
+  
+jobs:
+  list:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - run:
+          name: install dependencies
+          command: |
+            python3 -m venv devops
+            source devops/bin/activate
+            make install
+            
+      - run:
+          name: run lint
+          command: |
+            source devops/bin/activate
+            make lint
+  
+          no_output_timeout: 30m 
