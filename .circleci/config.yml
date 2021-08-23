@@ -35,7 +35,7 @@ jobs:
           name: Build, Test and Upload docker image
           command: |
             docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PWD}
-            docker build -t ramrbs1/project6:${CIRCLE_WORKFLOW_ID:0:7} .
+            docker build -t ramrbs1/project6:latest .
             docker run -d --rm --name testapp -p 8081:8080 ramrbs1/project6:latest
             sleep 5
             docker container ls
@@ -116,6 +116,8 @@ workflows:
             - lint
       - aws-eks/create-cluster:
           cluster-name: ram-capstone
+          requires:
+            - configure-image
       - test-cluster:
           cluster-name: ram-capstone
           requires:
@@ -142,4 +144,4 @@ workflows:
       - aws-eks/delete-cluster:
           cluster-name: ram-capstone
           requires:
-            - test-cluster
+            - aws-eks/update-container-image
