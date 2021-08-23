@@ -123,19 +123,19 @@ workflows:
             cluster-name:  ram-capstone
             requires:
               - test-cluster
-        - test-deployment:
-            cluster-name:  ram-capstone
-            requires:
-              - create-deployment              
-        - aws-eks/update-container-image:
-            cluster-name: ram-capstone
-            container-image-updates: 'Ram-capstone-deployment=ramrbs1/project6:latest'
-            get-rollout-status: true
-            record: true
-            requires:
-             - test-deployment
-            resource-name:  deployment/Ram-capstone-deployment        
-            
+      - test-deployment:
+          cluster-name:  ram-capstone
+          requires:
+            - create-deployment              
+      - aws-eks/update-container-image:
+          cluster-name: ram-capstone
+          container-image-updates: 'Ram-capstone-deployment=ramrbs1/project6:latest'
+          get-rollout-status: true
+          record: true
+          requires:
+           - test-deployment
+          resource-name:  deployment/Ram-capstone-deployment        
+          
             
             
       - aws-eks/delete-cluster:
