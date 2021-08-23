@@ -31,7 +31,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Build, test and push docker image
+          name: Build, Test and Upload docker image
           command: |
             docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PWD}
             docker build -t ramrbs1/project6:${CIRCLE_WORKFLOW_ID:0:7} .
@@ -49,7 +49,7 @@ jobs:
             fi
             echo "CIRCLE CI WORKFLOW ID ${CIRCLE_WORKFLOW_ID:0:7}"
             docker push ramrbs1/project6:${CIRCLE_WORKFLOW_ID:0:7}
-            docker push ramrbs1/project6:latest
+            
 
           
 workflows:
