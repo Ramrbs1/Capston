@@ -4,6 +4,14 @@ orbs:
   kubernetes: circleci/kubernetes@0.12.0
   aws-eks: circleci/aws-eks@0.2.3
   
+parameters:
+  aws-region:
+    default: "us-west-2"
+    description: |
+       The AWS region that the cluster is in. If not specified, the configured default
+       region for your AWS CLI installation will be used.
+    type: string
+  
   
 jobs:
   lint:
@@ -61,7 +69,7 @@ jobs:
       - kubernetes/install
       - aws-eks/update-kubeconfig-with-authenticator:
           cluster-name: << parameters.cluster-name >>
-          aws-region: us-west-2
+          AWS_REGION: << parameters.aws-region >>
       - run:
           name: Kube cluster
           command: |
@@ -79,7 +87,6 @@ jobs:
       - checkout
       - aws-eks/update-kubeconfig-with-authenticator:
           cluster-name: << parameters.cluster-name >>
-          aws-region: << parameters.aws-region >>
           install-kubectl: true
       - kubernetes/create-or-update-resource:
           get-rollout-status: true
@@ -98,7 +105,6 @@ jobs:
       - kubernetes/install
       - aws-eks/update-kubeconfig-with-authenticator:
           cluster-name: << parameters.cluster-name >>
-          aws-region: << parameters.aws-region >>
       - run:
           name: Kube cluster
           command: |
@@ -119,27 +125,22 @@ workflows:
             - lint
       - aws-eks/create-cluster:
           cluster-name: ram-capstone
-          aws-region: us-west-2
           requires:
             - configure-image
       - test-cluster:
           cluster-name: ram-capstone
-          aws-region: us-west-2
           requires:
             - aws-eks/create-cluster
       - create-deployment:
             cluster-name:  ram-capstone
-            aws-region: us-west-2
             requires:
               - test-cluster
       - test-deployment:
           cluster-name:  ram-capstone
-          aws-region: us-west-2
           requires:
             - create-deployment              
       - aws-eks/update-container-image:
           cluster-name: ram-capstone
-          aws-region: us-west-2
           container-image-updates: 'Ram-capstone-deployment=ramrbs1/project6:latest'
           get-rollout-status: true
           record: true
@@ -151,6 +152,5 @@ workflows:
             
 #      - aws-eks/delete-cluster:
 #          cluster-name: ram-capstone
-#          aws-region: us-west-2
 #          requires:
 #            - aws-eks/update-container-image
