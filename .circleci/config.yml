@@ -4,14 +4,6 @@ orbs:
   kubernetes: circleci/kubernetes@0.12.0
   aws-eks: circleci/aws-eks@0.2.3
   
-parameters:
-    aws-region:
-      default: "us-west-2"
-      description: |
-         The AWS region that the cluster is in. If not specified, the configured default
-         region for your AWS CLI installation will be used.
-      type: string
-  
   
 jobs:
   lint:
@@ -69,7 +61,6 @@ jobs:
       - kubernetes/install
       - aws-eks/update-kubeconfig-with-authenticator:
           cluster-name: << parameters.cluster-name >>
-          AWS_REGION: "<< parameters.aws-region >>"
       - run:
           name: Kube cluster
           command: |
