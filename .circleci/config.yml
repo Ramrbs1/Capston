@@ -61,6 +61,7 @@ jobs:
       - kubernetes/install
       - aws-eks/update-kubeconfig-with-authenticator:
           cluster-name: << parameters.cluster-name >>
+          aws-region: << parameters.aws-region >>
       - run:
           name: Kube cluster
           command: |
@@ -78,6 +79,7 @@ jobs:
       - checkout
       - aws-eks/update-kubeconfig-with-authenticator:
           cluster-name: << parameters.cluster-name >>
+          aws-region: << parameters.aws-region >>
           install-kubectl: true
       - kubernetes/create-or-update-resource:
           get-rollout-status: true
@@ -96,6 +98,7 @@ jobs:
       - kubernetes/install
       - aws-eks/update-kubeconfig-with-authenticator:
           cluster-name: << parameters.cluster-name >>
+          aws-region: << parameters.aws-region >>
       - run:
           name: Kube cluster
           command: |
@@ -116,22 +119,27 @@ workflows:
             - lint
       - aws-eks/create-cluster:
           cluster-name: ram-capstone
+          aws-region: us-west-2
           requires:
             - configure-image
       - test-cluster:
           cluster-name: ram-capstone
+          aws-region: us-west-2
           requires:
             - aws-eks/create-cluster
       - create-deployment:
             cluster-name:  ram-capstone
+            aws-region: us-west-2
             requires:
               - test-cluster
       - test-deployment:
           cluster-name:  ram-capstone
+          aws-region: us-west-2
           requires:
             - create-deployment              
       - aws-eks/update-container-image:
           cluster-name: ram-capstone
+          aws-region: us-west-2
           container-image-updates: 'Ram-capstone-deployment=ramrbs1/project6:latest'
           get-rollout-status: true
           record: true
@@ -143,5 +151,6 @@ workflows:
             
 #      - aws-eks/delete-cluster:
 #          cluster-name: ram-capstone
+#          aws-region: us-west-2
 #          requires:
 #            - aws-eks/update-container-image
