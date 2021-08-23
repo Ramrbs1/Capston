@@ -24,9 +24,36 @@ jobs:
             make lint
   
           no_output_timeout: 30m 
+          
+  build-test-push:
+    machine: true
+    working_directory: ~/app
+    steps:
+      - checkout
+      - run:
+          name: Build, test and push docker image
+          command: |
+            docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PWD}
+            docker build -t ramrbs1/project6:${CIRCLE_WORKFLOW_ID:0:7} .
+            docker run -d --rm --name testapp -p 8081:8080 ramrbs1/project6:${CIRCLE_WORKFLOW_ID:0:7}
+            sleep 5
+            docker container ls
+            export URL="http://localhost:8081"
+            export response=$(curl -s $URL)
+            echo "This is response $response"
+            if [[ $response == *"Ram Kumar"* ]]; then
+              docker stop testapp
+            else
+              docker stop testapp
+              exit 1
+            fi
+            echo "CIRCLE CI WORKFLOW ID ${CIRCLE_WORKFLOW_ID:0:7}"
+            docker push ramrbs1/project6:${CIRCLE_WORKFLOW_ID:0:7}
+            docker push ramrbs1/project6:latest
 
           
 workflows:
   default:
     jobs:
       - lint
+      - build-test-push
