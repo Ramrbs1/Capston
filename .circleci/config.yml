@@ -24,3 +24,9 @@ jobs:
             make lint
   
           no_output_timeout: 30m 
+
+          
+ workflows:
+  default:
+    jobs:
+      - lint
