@@ -35,20 +35,20 @@ jobs:
           name: Build, Test and Upload docker image
           command: |
             docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PWD}
-            docker build -t ramrbs1/project6:latest .
-            docker run -d --rm --name testapp -p 8081:8080 ramrbs1/project6:latest
+            docker build -t ramrbs1/project6:1.0 .
+            docker run -d --rm --name flaskapp -p 8081:8080 ramrbs1/project6:1.0
             sleep 5
             docker container ls
             export URL="http://localhost:8081"
             export response=$(curl -s $URL)
             echo "This is response $response"
             if [[ $response == *"Ram Kumar"* ]]; then
-              docker stop testapp
+              docker stop flaskapp
             else
-              docker stop testapp
+              docker stop flaskapp
               exit 1
             fi
-            docker push ramrbs1/project6:latest
+            docker push ramrbs1/project6:1.0
             
   test-cluster:
     executor: aws-eks/python3
@@ -102,6 +102,8 @@ jobs:
             kubectl get svc
             kubectl get nodes
             kubectl get deployment
+            kubectl get pods
+            
           
           
             
