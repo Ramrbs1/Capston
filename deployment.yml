@@ -21,7 +21,7 @@ spec:
         app: ram-capstone-deployment
     spec:
       containers:
-        - image: ramrbs1/project6
+        - image: ramrbs1/project6:latest
           imagePullPolicy: Always
           name: ram-capstone-deployment
           ports:
