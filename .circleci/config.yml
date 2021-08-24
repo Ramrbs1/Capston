@@ -116,18 +116,18 @@ workflows:
       - configure-image:
           requires:
             - lint
-#      - aws-eks/create-cluster:
-#          cluster-name: ram-capstone
-#          requires:
-#            - configure-image
-#      - test-cluster:
-#          cluster-name: ram-capstone
-#          requires:
-#            - aws-eks/create-cluster
-      - test-cluster:
+      - aws-eks/create-cluster:
           cluster-name: ram-capstone
           requires:
             - configure-image
+      - test-cluster:
+          cluster-name: ram-capstone
+          requires:
+            - aws-eks/create-cluster
+#      - test-cluster:
+#          cluster-name: ram-capstone
+#          requires:
+ #           - configure-image
       - create-deployment:
             cluster-name: ram-capstone
             requires:
@@ -147,7 +147,7 @@ workflows:
           
             
             
-#      - aws-eks/delete-cluster:
-#          cluster-name: ram-capstone
-#          requires:
-#            - aws-eks/update-container-image
+      - aws-eks/delete-cluster:
+          cluster-name: ram-capstone
+          requires:
+           - aws-eks/update-container-image
