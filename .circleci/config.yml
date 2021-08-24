@@ -138,7 +138,7 @@ workflows:
             - create-deployment              
       - aws-eks/update-container-image:
           cluster-name: ram-capstone
-          container-image-updates: 'ram-capstone-deployment=ramrbs1/project6:latest'
+          container-image-updates: 'ram-capstone-deployment=ramrbs1/project6:1.0'
           get-rollout-status: true
           record: true
           requires:
