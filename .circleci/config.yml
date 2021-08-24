@@ -35,8 +35,8 @@ jobs:
           name: Build, Test and Upload docker image
           command: |
             docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PWD}
-            docker build -t ramrbs1/project6:1.0 .
-            docker run -d --rm --name flaskapp -p 8081:8080 ramrbs1/project6:1.0
+            docker build -t ramrbs1/project6:2.0 .
+            docker run -d --rm --name flaskapp -p 8081:8080 ramrbs1/project6:2.0
             sleep 5
             docker container ls
             export URL="http://localhost:8081"
@@ -48,7 +48,7 @@ jobs:
               docker stop flaskapp
               exit 1
             fi
-            docker push ramrbs1/project6:1.0
+            docker push ramrbs1/project6:2.0
             
   test-cluster:
     executor: aws-eks/python3
@@ -138,7 +138,7 @@ workflows:
             - create-deployment              
       - aws-eks/update-container-image:
           cluster-name: ram-capstone
-          container-image-updates: 'ram-capstone-deployment=ramrbs1/project6:1.0'
+          container-image-updates: 'ram-capstone-deployment=ramrbs1/project6:2.0'
           get-rollout-status: true
           record: true
           requires:
